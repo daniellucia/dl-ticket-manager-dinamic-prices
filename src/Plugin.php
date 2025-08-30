@@ -5,12 +5,62 @@ defined('ABSPATH') || exit;
 class TMDinamicPricesPlugin
 {
 
-    private $units;
-
+    /**
+     * Iniciamos el plugin
+     * @return void
+     * @author Daniel Lucia
+     */
     public function init(): void
     {
         add_action('dl_ticket_event_fields_after', [$this, 'eventFieldsAfter'], 10, 3);
         add_action('dl_ticket_save_event_fields', [$this, 'saveEventFields']);
+        add_filter('woocommerce_product_get_price', [$this, 'setDynamicPrice'], 20, 2);
+        add_filter('woocommerce_product_get_regular_price', [$this, 'setDynamicPrice'], 20, 2);
+    }
+
+    /**
+     * Cambia el precio del producto dependiendo de los rangos
+     * @param mixed $price
+     * @param mixed $product
+     * @author Daniel Lucia
+     */
+    public function setDynamicPrice($price, $product)
+    {
+        if ($product->get_type() !== 'ticket') {
+            return $price;
+        }
+
+        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+        if (!is_array($prices) || empty($prices)) {
+            return $price;
+        }
+
+        $today = date('Y-m-d');
+        $dynamic_price = null;
+
+        //Ordenamos los precios
+        usort($prices, function($a, $b) {
+            return strtotime($a['date']) <=> strtotime($b['date']);
+        });
+
+        foreach ($prices as $row) {
+            if (!empty($row['date']) && !empty($row['price'])) {
+                if ($today <= $row['date']) {
+                    $dynamic_price = floatval($row['price']);
+                    break;
+                }
+            }
+        }
+
+        // Si no hay precio válido, usamos el último
+        if ($dynamic_price === null && !empty($prices)) {
+            $last = end($prices);
+            if (!empty($last['price'])) {
+                $dynamic_price = floatval($last['price']);
+            }
+        }
+
+        return $dynamic_price !== null ? $dynamic_price : $price;
     }
 
     /**
