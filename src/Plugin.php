@@ -85,13 +85,29 @@ class TMDinamicPricesPlugin
     }
 
     /**
-     * Muestra los precios dinámicos
-     * @return void
-     * @author Daniel Lucia
+     * Añade los checkboxes para mostrar la lista de precios y los días restantes
      */
     public function eventFieldsAfter()
     {
         echo '<div class="options_group">';
+        
+        $show_prices_list = get_post_meta(get_the_ID(), '_show_dynamic_prices_list', true);
+        woocommerce_wp_checkbox([
+            'id' => '_show_dynamic_prices_list',
+            'label' => __('Show dynamic price list on product page', 'dl-ticket-manager-dinamic-prices'),
+            'desc_tip' => true,
+            'description' => __('If checked, the dynamic price list will be displayed on the product page.', 'dl-ticket-manager-dinamic-prices'),
+            'value' => $show_prices_list === 'yes' ? 'yes' : 'no',
+        ]);
+
+        $show_days_left = get_post_meta(get_the_ID(), '_show_days_to_next_price_change', true);
+        woocommerce_wp_checkbox([
+            'id' => '_show_days_to_next_price_change',
+            'label' => __('Show days remaining until the next price change', 'dl-ticket-manager-dinamic-prices'),
+            'desc_tip' => true,
+            'description' => __('If checked, the number of days remaining until the next price change will be displayed.', 'dl-ticket-manager-dinamic-prices'),
+            'value' => $show_days_left === 'yes' ? 'yes' : 'no',
+        ]);
         ?>
         <div class="_event_dynamic_prices" style="padding: 10px 0 10px 162px; width:100%;max-width:500px;">
 
@@ -151,10 +167,7 @@ class TMDinamicPricesPlugin
     }
 
     /**
-     * Guarda los precios dinámicos
-     * @param mixed $post_id
-     * @return void
-     * @author Daniel Lucia
+     * Guarda los precios dinámicos y los checkboxes
      */
     public function saveEventFields(): void
     {
@@ -169,10 +182,16 @@ class TMDinamicPricesPlugin
 
             update_post_meta(get_the_ID(), '_dynamic_prices', $prices);
         }
+
+        $show_prices_list = isset($_POST['_show_dynamic_prices_list']) ? 'yes' : 'no';
+        update_post_meta(get_the_ID(), '_show_dynamic_prices_list', $show_prices_list);
+
+        $show_days_left = isset($_POST['_show_days_to_next_price_change']) ? 'yes' : 'no';
+        update_post_meta(get_the_ID(), '_show_days_to_next_price_change', $show_days_left);
     }
 
     /**
-     * Mostramos los rangos de precios en la ficha de producto
+     * Mostramos los rangos de precios en la ficha de producto si corresponde
      * @return void
      * @author Daniel Lucia
      */
@@ -184,6 +203,11 @@ class TMDinamicPricesPlugin
             return;
         }
 
+        $show_prices_list = get_post_meta($product->get_id(), '_show_dynamic_prices_list', true);
+        if ($show_prices_list !== 'yes') {
+            return;
+        }
+
         $prices = $this->getPrices($product);
         if (!is_array($prices) || empty($prices)) {
             return;
@@ -192,36 +216,37 @@ class TMDinamicPricesPlugin
         echo '<div class="dl-ticket-dynamic-prices">';
             echo '<p><strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong></p>';
             echo '<ul class="dl-dynamic-prices-list">';
-                foreach ($prices as $row) {
-                    if (!empty($row['date']) && !empty($row['price'])) {
-                        echo '<li>' .
-                            esc_html__('Until', 'dl-ticket-manager-dinamic-prices') . ' ' .
-                            esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
-                            ': <strong>' . wc_price($row['price']) . '</strong>';
-                        echo '</li>';
-                    }
+            foreach ($prices as $row) {
+                if (!empty($row['date']) && !empty($row['price'])) {
+                    echo '<li>' .
+                        esc_html__('Until', 'dl-ticket-manager-dinamic-prices') . ' ' .
+                        esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
+                        ': <strong>' . wc_price($row['price']) . '</strong>';
+                    echo '</li>';
                 }
-
-                // Precio normal después del último rango
-                echo '<li>' .
-                    esc_html__('After the last date:', 'dl-ticket-manager-dinamic-prices') .
-                    ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
-                echo '</li>';
-
+            }
+            // Precio normal después del último rango
+            echo '<li>' .
+                esc_html__('After the last date:', 'dl-ticket-manager-dinamic-prices') .
+                ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
+            echo '</li>';
             echo '</ul>';
         echo '</div>';
     }
 
     /**
-     * Muestra los dias restantes para el siguiente cambio de precio
-     * @return void
-     * @author Daniel Lucia
+     * Muestra los días restantes para el siguiente cambio de precio si corresponde
      */
     public function showDaysToNextPriceChange()
     {
         global $product;
 
         if ($product->get_type() !== 'ticket') {
+            return;
+        }
+
+        $show_days_left = get_post_meta($product->get_id(), '_show_days_to_next_price_change', true);
+        if ($show_days_left !== 'yes') {
             return;
         }
 
