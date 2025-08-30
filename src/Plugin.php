@@ -190,25 +190,25 @@ class TMDinamicPricesPlugin
         }
 
         echo '<div class="dl-ticket-dynamic-prices">';
-        echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
-        echo '<ul class="dl-dynamic-prices-list">';
-            foreach ($prices as $row) {
-                if (!empty($row['date']) && !empty($row['price'])) {
-                    echo '<li>' .
-                        esc_html__('Until', 'dl-ticket-manager-dinamic-prices') . ' ' .
-                        esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
-                        ': <strong>' . wc_price($row['price']) . '</strong>';
-                    echo '</li>';
+            echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
+            echo '<ul class="dl-dynamic-prices-list">';
+                foreach ($prices as $row) {
+                    if (!empty($row['date']) && !empty($row['price'])) {
+                        echo '<li>' .
+                            esc_html__('Until', 'dl-ticket-manager-dinamic-prices') . ' ' .
+                            esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
+                            ': <strong>' . wc_price($row['price']) . '</strong>';
+                        echo '</li>';
+                    }
                 }
-            }
 
-            // Precio normal después del último rango
-            echo '<li>' .
-                esc_html__('After the last date:', 'dl-ticket-manager-dinamic-prices') .
-                ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
-            echo '</li>';
+                // Precio normal después del último rango
+                echo '<li>' .
+                    esc_html__('After the last date:', 'dl-ticket-manager-dinamic-prices') .
+                    ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
+                echo '</li>';
 
-        echo '</ul>';
+            echo '</ul>';
         echo '</div>';
     }
 
