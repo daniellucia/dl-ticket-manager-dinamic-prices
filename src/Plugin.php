@@ -15,7 +15,7 @@ class TMDinamicPricesPlugin
         add_action('dl_ticket_event_fields_after', [$this, 'eventFieldsAfter'], 10, 3);
         add_action('dl_ticket_save_event_fields', [$this, 'saveEventFields']);
         add_filter('woocommerce_product_get_price', [$this, 'setDynamicPrice'], 20, 2);
-        add_filter('woocommerce_product_get_regular_price', [$this, 'setDynamicPrice'], 20, 2);
+        add_action('woocommerce_single_product_summary', [$this, 'showDynamicPricesOnProduct'], 15);
     }
 
     /**
@@ -39,7 +39,7 @@ class TMDinamicPricesPlugin
         $dynamic_price = null;
 
         //Ordenamos los precios
-        usort($prices, function($a, $b) {
+        usort($prices, function ($a, $b) {
             return strtotime($a['date']) <=> strtotime($b['date']);
         });
 
@@ -71,7 +71,7 @@ class TMDinamicPricesPlugin
     public function eventFieldsAfter()
     {
         echo '<div class="options_group">';
-        ?>
+?>
         <div class="_event_dynamic_prices" style="padding: 10px 0 10px 162px; width:100%;max-width:500px;">
 
             <label><?php esc_html_e('Dinamic prices', 'dl-ticket-manager-dinamic-prices'); ?></label>
@@ -90,12 +90,12 @@ class TMDinamicPricesPlugin
                     if (!is_array($prices)) {
                         $prices = [[]];
                     }
-                    
+
                     foreach ($prices as $row) {
                     ?>
                         <tr>
                             <td><input type="date" name="dynamic_price_date[]" value="<?php echo esc_attr($row['date'] ?? ''); ?>" style="width: 100%;" /></td>
-                            <td><input type="number" step="0.01" min="0" name="dynamic_price_value[]" value="<?php echo esc_attr($row['price'] ?? ''); ?>" style="width: 100%;"  /></td>
+                            <td><input type="number" step="0.01" min="0" name="dynamic_price_value[]" value="<?php echo esc_attr($row['price'] ?? ''); ?>" style="width: 100%;" /></td>
                             <td><button type="button" class="button remove-row">-</button></td>
                         </tr>
                     <?php
@@ -105,7 +105,7 @@ class TMDinamicPricesPlugin
             </table>
 
             <button type="button" class="button" id="add-dynamic-price-row" style="margin: 5px 0 0 auto;display: block;"><?php esc_html_e('Add price', 'dl-ticket-manager-dinamic-prices'); ?></button>
-        
+
         </div>
 
         <script>
@@ -124,7 +124,7 @@ class TMDinamicPricesPlugin
                 });
             });
         </script>
-        <?php
+<?php
 
         echo '</div>';
     }
@@ -148,5 +148,51 @@ class TMDinamicPricesPlugin
 
             update_post_meta(get_the_ID(), '_dynamic_prices', $prices);
         }
+    }
+
+    /**
+     * Mostramos los rangos de precios en la ficha de producto
+     * @return void
+     * @author Daniel Lucia
+     */
+    public function showDynamicPricesOnProduct()
+    {
+        global $product;
+
+        if ($product->get_type() !== 'ticket') {
+            return;
+        }
+
+        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+        if (!is_array($prices) || empty($prices)) {
+            return;
+        }
+
+        // Ordena los precios por fecha ascendente
+        usort($prices, function ($a, $b) {
+            return strtotime($a['date']) <=> strtotime($b['date']);
+        });
+
+        echo '<div class="dl-ticket-dynamic-prices" style="margin-bottom:15px;">';
+        echo '<strong>' . esc_html__('Rangos de precio:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
+        echo '<ul style="margin:0; padding-left:18px;">';
+            foreach ($prices as $row) {
+                if (!empty($row['date']) && !empty($row['price'])) {
+                    echo '<li>' .
+                        esc_html__('Hasta el', 'dl-ticket-manager-dinamic-prices') . ' ' .
+                        esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
+                        ': <strong>' . wc_price($row['price']) . '</strong>';
+                    echo '</li>';
+                }
+            }
+
+            // Precio normal después del último rango
+            echo '<li>' .
+                esc_html__('Después de la última fecha:', 'dl-ticket-manager-dinamic-prices') .
+                ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
+            echo '</li>';
+
+        echo '</ul>';
+        echo '</div>';
     }
 }
