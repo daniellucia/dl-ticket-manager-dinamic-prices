@@ -6,3 +6,11 @@
     margin: 0;
     list-style: none;
 }
+
+.dl-ticket-next-price-change {
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: #dd8a43;
+    color: #fff;
+    margin: 30px 0;
+}

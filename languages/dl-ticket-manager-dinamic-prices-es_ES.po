@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Dinamic prices for Ticket Manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-30 09:05+0000\n"
-"PO-Revision-Date: 2025-08-30 09:06+0000\n"
+"PO-Revision-Date: 2025-08-30 09:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -15,11 +15,11 @@ msgstr ""
 "X-Loco-Version: 2.8.0; wp-6.8.2; php-8.1.29\n"
 "X-Domain: dl-ticket-manager-dinamic-prices"
 
-#: src/Plugin.php:127
+#: src/Plugin.php:128
 msgid "Add price"
 msgstr "Añadir precio"
 
-#: src/Plugin.php:211
+#: src/Plugin.php:212
 msgid "After the last date:"
 msgstr "Después de la última fecha:"
 
@@ -27,7 +27,7 @@ msgstr "Después de la última fecha:"
 msgid "Daniel Lúcia"
 msgstr "Daniel Lúcia"
 
-#: src/Plugin.php:97
+#: src/Plugin.php:98
 msgid "Dinamic prices"
 msgstr "Precios dinámicos"
 
@@ -35,7 +35,7 @@ msgstr "Precios dinámicos"
 msgid "Dinamic prices for Ticket Manager"
 msgstr "Precios dinámicos para Ticket Manager"
 
-#: src/Plugin.php:102
+#: src/Plugin.php:103
 msgid "End date"
 msgstr "Fecha final"
 
@@ -47,14 +47,18 @@ msgstr "Gestión de precios dinámicos para el gestor de tickets."
 msgid "http://www.daniellucia.es"
 msgstr "http://www.daniellucia.es"
 
-#: src/Plugin.php:103
+#: src/Plugin.php:104
 msgid "Price"
 msgstr "Precio"
 
-#: src/Plugin.php:197
+#: src/Plugin.php:198
 msgid "Price Ranges:"
 msgstr "Rango de precios"
 
-#: src/Plugin.php:202
+#: src/Plugin.php:260
+msgid "There are %d day(s) left for the next price change."
+msgstr "Quedan %d día(s) para el próximo cambio de precio."
+
+#: src/Plugin.php:203
 msgid "Until"
 msgstr "Hasta el"

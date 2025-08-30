@@ -16,8 +16,9 @@ class TMDinamicPricesPlugin
         add_action('dl_ticket_event_fields_after', [$this, 'eventFieldsAfter'], 10, 3);
         add_action('dl_ticket_save_event_fields', [$this, 'saveEventFields']);
         add_filter('woocommerce_product_get_price', [$this, 'setDynamicPrice'], 20, 2);
-        add_action('woocommerce_single_product_summary', [$this, 'showDynamicPricesOnProduct'], 15);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']); // <-- Añade este hook
+        add_action('woocommerce_single_product_summary', [$this, 'showDynamicPricesOnProduct'], 30);
+        add_action('woocommerce_single_product_summary', [$this, 'showDaysToNextPriceChange'], 20);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']); 
     }
 
 
@@ -214,5 +215,52 @@ class TMDinamicPricesPlugin
 
         echo '</ul>';
         echo '</div>';
+    }
+
+    /**
+     * Muestra los dias restantes para el siguiente cambio de precio
+     * @return void
+     * @author Daniel Lucia
+     */
+    public function showDaysToNextPriceChange()
+    {
+        global $product;
+
+        if ($product->get_type() !== 'ticket') {
+            return;
+        }
+
+        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+        if (!is_array($prices) || empty($prices)) {
+            return;
+        }
+
+        $today = strtotime(date('Y-m-d'));
+        $next_date = null;
+
+        // Ordenamos los precios por fecha ascendente
+        usort($prices, function ($a, $b) {
+            return strtotime($a['date']) <=> strtotime($b['date']);
+        });
+
+        foreach ($prices as $row) {
+            if (!empty($row['date']) && !empty($row['price'])) {
+                $date = strtotime($row['date']);
+                if ($date > $today) {
+                    $next_date = $date;
+                    break;
+                }
+            }
+        }
+
+        if ($next_date) {
+            $days = ceil(($next_date - $today) / DAY_IN_SECONDS);
+            echo '<div class="dl-ticket-next-price-change">';
+            printf(
+                esc_html__('There are %d day(s) left for the next price change.', 'dl-ticket-manager-dinamic-prices'),
+                $days
+            );
+            echo '</div>';
+        }
     }
 }
