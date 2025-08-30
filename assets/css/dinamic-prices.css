@@ -1,4 +1,8 @@
-.dynamic-prices-list {
-    margin: 15px 0;
+.dl-ticket-dynamic-prices {
+    margin: 0 0 15px 0;
+}
+
+.dl-dynamic-prices-list {
+    margin: 0;
     list-style: none;
 }

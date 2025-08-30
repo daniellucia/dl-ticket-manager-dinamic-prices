@@ -193,9 +193,9 @@ class TMDinamicPricesPlugin
             return strtotime($a['date']) <=> strtotime($b['date']);
         });
 
-        echo '<div class="dl-ticket-dynamic-prices" style="margin-bottom:15px;">';
+        echo '<div class="dl-ticket-dynamic-prices">';
         echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
-        echo '<ul class="dynamic-prices-list">';
+        echo '<ul class="dl-dynamic-prices-list">';
             foreach ($prices as $row) {
                 if (!empty($row['date']) && !empty($row['price'])) {
                     echo '<li>' .
