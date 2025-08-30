@@ -145,7 +145,7 @@ class TMDinamicPricesPlugin
                 });
             });
         </script>
-<?php
+        <?php
 
         echo '</div>';
     }
