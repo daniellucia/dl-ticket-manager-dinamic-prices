@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Dinamic prices for Ticket Manager
  * Description: Gestión de precios dinámicos para el gestor de tickets.
- * Version: 0.0.2
+ * Version: 0.0.5
  * Author: Daniel Lúcia
  * Author URI: http://www.daniellucia.es
  * textdomain: dl-ticket-manager-dinamic-prices

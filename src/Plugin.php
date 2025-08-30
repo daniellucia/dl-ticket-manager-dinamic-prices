@@ -4,6 +4,7 @@ defined('ABSPATH') || exit;
 
 class TMDinamicPricesPlugin
 {
+    private $version = '0.0.5';
 
     /**
      * Iniciamos el plugin
@@ -16,6 +17,25 @@ class TMDinamicPricesPlugin
         add_action('dl_ticket_save_event_fields', [$this, 'saveEventFields']);
         add_filter('woocommerce_product_get_price', [$this, 'setDynamicPrice'], 20, 2);
         add_action('woocommerce_single_product_summary', [$this, 'showDynamicPricesOnProduct'], 15);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']); // <-- Añade este hook
+    }
+
+
+    /**
+     * Incluimos assets
+     * @return void
+     * @author Daniel Lucia
+     */
+    public function enqueueAssets()
+    {
+        if (is_product()) {
+            wp_enqueue_style(
+                'dl-ticket-dinamic-prices',
+                plugins_url('../assets/css/dinamic-prices.css', __FILE__),
+                [],
+                $this->version
+            );
+        }
     }
 
     /**
@@ -175,7 +195,7 @@ class TMDinamicPricesPlugin
 
         echo '<div class="dl-ticket-dynamic-prices" style="margin-bottom:15px;">';
         echo '<strong>' . esc_html__('Rangos de precio:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
-        echo '<ul style="margin:0; padding-left:18px;">';
+        echo '<ul class="dynamic-prices-list">';
             foreach ($prices as $row) {
                 if (!empty($row['date']) && !empty($row['price'])) {
                     echo '<li>' .
