@@ -190,7 +190,7 @@ class TMDinamicPricesPlugin
         }
 
         echo '<div class="dl-ticket-dynamic-prices">';
-            echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
+            echo '<p><strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong></p>';
             echo '<ul class="dl-dynamic-prices-list">';
                 foreach ($prices as $row) {
                     if (!empty($row['date']) && !empty($row['price'])) {
