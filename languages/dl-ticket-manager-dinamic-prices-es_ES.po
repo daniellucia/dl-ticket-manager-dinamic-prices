@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Dinamic prices for Ticket Manager\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-30 09:05+0000\n"
+"PO-Revision-Date: 2025-08-30 09:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: Español\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.1.29\n"
+"X-Domain: dl-ticket-manager-dinamic-prices"
+
+#: src/Plugin.php:127
+msgid "Add price"
+msgstr "Añadir precio"
+
+#: src/Plugin.php:211
+msgid "After the last date:"
+msgstr "Después de la última fecha:"
+
+#. Author of the plugin
+msgid "Daniel Lúcia"
+msgstr "Daniel Lúcia"
+
+#: src/Plugin.php:97
+msgid "Dinamic prices"
+msgstr "Precios dinámicos"
+
+#. Name of the plugin
+msgid "Dinamic prices for Ticket Manager"
+msgstr "Precios dinámicos para Ticket Manager"
+
+#: src/Plugin.php:102
+msgid "End date"
+msgstr "Fecha final"
+
+#. Description of the plugin
+msgid "Gestión de precios dinámicos para el gestor de tickets."
+msgstr "Gestión de precios dinámicos para el gestor de tickets."
+
+#. Author URI of the plugin
+msgid "http://www.daniellucia.es"
+msgstr "http://www.daniellucia.es"
+
+#: src/Plugin.php:103
+msgid "Price"
+msgstr "Precio"
+
+#: src/Plugin.php:197
+msgid "Price Ranges:"
+msgstr "Rango de precios"
+
+#: src/Plugin.php:202
+msgid "Until"
+msgstr "Hasta el"

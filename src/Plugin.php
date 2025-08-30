@@ -194,12 +194,12 @@ class TMDinamicPricesPlugin
         });
 
         echo '<div class="dl-ticket-dynamic-prices" style="margin-bottom:15px;">';
-        echo '<strong>' . esc_html__('Rangos de precio:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
+        echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
         echo '<ul class="dynamic-prices-list">';
             foreach ($prices as $row) {
                 if (!empty($row['date']) && !empty($row['price'])) {
                     echo '<li>' .
-                        esc_html__('Hasta el', 'dl-ticket-manager-dinamic-prices') . ' ' .
+                        esc_html__('Until', 'dl-ticket-manager-dinamic-prices') . ' ' .
                         esc_html(date_i18n(get_option('date_format'), strtotime($row['date']))) .
                         ': <strong>' . wc_price($row['price']) . '</strong>';
                     echo '</li>';
@@ -208,7 +208,7 @@ class TMDinamicPricesPlugin
 
             // Precio normal después del último rango
             echo '<li>' .
-                esc_html__('Después de la última fecha:', 'dl-ticket-manager-dinamic-prices') .
+                esc_html__('After the last date:', 'dl-ticket-manager-dinamic-prices') .
                 ' <strong>' . wc_price($product->get_regular_price()) . '</strong>';
             echo '</li>';
 
