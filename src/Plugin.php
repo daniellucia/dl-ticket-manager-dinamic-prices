@@ -92,7 +92,7 @@ class TMDinamicPricesPlugin
     public function eventFieldsAfter()
     {
         echo '<div class="options_group">';
-?>
+        ?>
         <div class="_event_dynamic_prices" style="padding: 10px 0 10px 162px; width:100%;max-width:500px;">
 
             <label><?php esc_html_e('Dinamic prices', 'dl-ticket-manager-dinamic-prices'); ?></label>
@@ -107,7 +107,7 @@ class TMDinamicPricesPlugin
                 </thead>
                 <tbody>
                     <?php
-                    $prices = get_post_meta(get_the_ID(), '_dynamic_prices', true);
+                    $prices = $this->getPrices(get_the_ID());
                     if (!is_array($prices)) {
                         $prices = [[]];
                     }
@@ -184,15 +184,10 @@ class TMDinamicPricesPlugin
             return;
         }
 
-        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+        $prices = $this->getPrices($product);
         if (!is_array($prices) || empty($prices)) {
             return;
         }
-
-        // Ordena los precios por fecha ascendente
-        usort($prices, function ($a, $b) {
-            return strtotime($a['date']) <=> strtotime($b['date']);
-        });
 
         echo '<div class="dl-ticket-dynamic-prices">';
         echo '<strong>' . esc_html__('Price Ranges:', 'dl-ticket-manager-dinamic-prices') . '</strong>';
@@ -230,18 +225,13 @@ class TMDinamicPricesPlugin
             return;
         }
 
-        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+        $prices = $this->getPrices($product);
         if (!is_array($prices) || empty($prices)) {
             return;
         }
 
         $today = strtotime(date('Y-m-d'));
         $next_date = null;
-
-        // Ordenamos los precios por fecha ascendente
-        usort($prices, function ($a, $b) {
-            return strtotime($a['date']) <=> strtotime($b['date']);
-        });
 
         foreach ($prices as $row) {
             if (!empty($row['date']) && !empty($row['price'])) {
@@ -262,5 +252,27 @@ class TMDinamicPricesPlugin
             );
             echo '</div>';
         }
+    }
+
+    /**
+     * Obtiene los precios dinámicos de un producto
+     * @param mixed $product
+     * @return array
+     * @author Daniel Lucia
+     */
+    private function getPrices($product) {
+
+        if (is_numeric($product)) {
+            $product = wc_get_product($product);
+        }
+        
+        $prices = get_post_meta($product->get_id(), '_dynamic_prices', true);
+
+        // Ordenamos los precios por fecha ascendente
+        usort($prices, function ($a, $b) {
+            return strtotime($a['date']) <=> strtotime($b['date']);
+        });
+
+        return $prices;
     }
 }
