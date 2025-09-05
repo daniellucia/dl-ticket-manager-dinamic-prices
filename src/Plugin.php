@@ -1,6 +1,6 @@
 <?php
 
-namespace DL\TicketManagerDinamicPrices;
+namespace DL\TicketsDinamicPrices;
 
 defined('ABSPATH') || exit;
 

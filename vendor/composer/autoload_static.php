@@ -9,12 +9,12 @@ class ComposerStaticInitDLDinamicPrices
     public static $prefixLengthsPsr4 = array (
         'D' => 
         array (
-            'DL\\DinamicPrices\\' => 17,
+            'DL\\TicketsDinamicPrices\\' => 24,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'DL\\DinamicPrices\\' => 
+        'DL\\TicketsDinamicPrices\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -22,6 +22,7 @@ class ComposerStaticInitDLDinamicPrices
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'DL\\TicketsDinamicPrices\\Plugin' => __DIR__ . '/../..' . '/src/Plugin.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

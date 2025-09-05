@@ -10,11 +10,11 @@
  * Requires Plugins: dl-ticket-manager
  */
 
-use DL\TicketManagerDinamicPrices\Plugin;
+use DL\TicketsDinamicPrices\Plugin;
 
 defined('ABSPATH') || exit;
 
-require_once __DIR__ . '/src/Plugin.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 add_action('plugins_loaded', function () {
 
