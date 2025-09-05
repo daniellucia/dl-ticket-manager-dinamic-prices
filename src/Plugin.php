@@ -1,8 +1,10 @@
 <?php
 
+namespace DL\TicketManagerDinamicPrices;
+
 defined('ABSPATH') || exit;
 
-class TMDinamicPricesPlugin
+class Plugin
 {
     private $version = '0.0.5';
 
